@@ -1,70 +1,14 @@
 import unittest, lexer
 
+input_code = ""
+with open('Tests/test1.txt', 'r') as test_file:
+    for line in test_file:
+        input_code += line
 
-input_code = """
-function count_even_numbers(A: List): Number => {
-    let even_count: Number = 0;
-
-    for (i, v of A) {
-        if (v % 2 == 0) {
-            even_count = even_count + 1;
-        }
-    }
-
-    return even_count;
-}
-"""
-
-output = """
-function
-count_even_numbers
-(
-A
-:
-List
-)
-:
-Number
-=>
-{
-let
-even_count
-:
-Number
-=
-0
-;
-for
-(
-i
-,
-v
-of
-A
-)
-{
-if
-(
-v
-%
-2
-==
-0
-)
-{
-even_count
-=
-even_count
-+
-1
-;
-}
-}
-return
-even_count
-;
-}
-"""
+output = ""
+with open('Tests/test1_answer.txt', 'r') as answer_file:
+    for line in answer_file:
+        output += line
 
 
 class TestLexer(unittest.TestCase):
