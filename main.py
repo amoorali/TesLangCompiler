@@ -1,4 +1,5 @@
-import unittest, lexer
+import unittest
+import lexer
 
 input_code = ""
 with open('Tests/test1.txt', 'r') as test_file:

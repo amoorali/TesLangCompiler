@@ -1,10 +1,14 @@
 import re
 
-IDENTIFIER = r'[A-Za-z_][A-Za-z_0-9]*'
-NUMBER = r'[0-9]+'
-COMMENT = r'(\/\/)(.*?)[\n\r]'
 
+IDENTIFIER = r'[A-Za-z_][A-Za-z_\d+]*'
+NUMBER = r'[\d]+'
+COMMENT = r'(\/\/)(.*?)[\n\r]'
+PARAN = r'[{(\[\])}]'
+OPERATOR = r'[*-+=<>/%]+'
+PONCTUATOR = r'[:;,]'
+TOKENS = r'({}|{}|{}|{}|{})'.format(IDENTIFIER, NUMBER, PARAN, OPERATOR, PONCTUATOR)
 
 def getTokens(code_string: str) -> list:
-    # re.search(r'[]')
-    pass
+    tk = re.findall(TOKENS, code_string)
+    return "\n".join(tk)
