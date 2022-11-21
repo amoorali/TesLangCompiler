@@ -54,7 +54,7 @@ class Lexer():
         self.lexer.add('or', r'\|\|')
 
         # comment
-        self.lexer.add('comment', r'\/\/.*[\n\r]')
+        self.lexer.add('comment', r'\/\/.*')
 
     def get_lexer(self):
         self._add_token()
