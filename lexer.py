@@ -37,8 +37,9 @@ class Lexer():
         self.lexer.add('sum', r'\+')
         self.lexer.add('sub', r'\-')
         self.lexer.add('mul', r'\*')
-        self.lexer.add('div', r'\/')
+        self.lexer.add('div', r'\/^\/')
         self.lexer.add('mod', r'\%')
+        self.lexer.add('assign', r'\=^\=')
 
         # comparison operators
         self.lexer.add('greater', r'\>')
