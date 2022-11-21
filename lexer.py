@@ -1,67 +1,60 @@
-from token import Token
+from Lexer.tools import Token, LexerGenerator
 
 
 class Lexer():
     def __init__(self):
-        self.lexer = r''
-        self.tokens = {}
+        self.lexer = LexerGenerator()
     
     def _add_token(self):
         # identifier
-        self.add('identifier', r'[A-Za-z_][A-Za-z_\d+]*')
+        self.lexer.add('identifier', r'[A-Za-z_][A-Za-z_\d+]*')
 
         # number
-        self.add('number', r'[\d]+')
+        self.lexer.add('number', r'[\d]+')
 
         # paranthesis
-        self.add('open_paran', r'\(')
-        self.add('close_paran', r'\)')
+        self.lexer.add('open_paran', r'\(')
+        self.lexer.add('close_paran', r'\)')
 
         # bracket
-        self.add('open_bracket', r'\[')
-        self.add('close_bracket', r'\]')
+        self.lexer.add('open_bracket', r'\[')
+        self.lexer.add('close_bracket', r'\]')
 
         # brace
-        self.add('open_brace', r'\{')
-        self.add('close_brace', r'\}')
+        self.lexer.add('open_brace', r'\{')
+        self.lexer.add('close_brace', r'\}')
 
         # punctuators
-        self.add('semi_colon', r'\;')
-        self.add('colon', r'\:')
-        self.add('period', r'\.')
-        self.add('ques_mark', r'\?')
-        self.add('exclam_point', r'\!')
-        self.add('comma', r'\,')
-        self.add('arrow', r'\=\>')
+        self.lexer.add('semi_colon', r'\;')
+        self.lexer.add('colon', r'\:')
+        self.lexer.add('period', r'\.')
+        self.lexer.add('ques_mark', r'\?')
+        self.lexer.add('exclam_point', r'\!')
+        self.lexer.add('comma', r'\,')
+        self.lexer.add('arrow', r'\=\>')
 
         # operators
-        self.add('sum', r'\+')
-        self.add('sub', r'\-')
-        self.add('mul', r'\*')
-        self.add('div', r'\/')
-        self.add('mod', r'\%')
+        self.lexer.add('sum', r'\+')
+        self.lexer.add('sub', r'\-')
+        self.lexer.add('mul', r'\*')
+        self.lexer.add('div', r'\/')
+        self.lexer.add('mod', r'\%')
 
         # comparison operators
-        self.add('greater', r'\>')
-        self.add('lesser', r'\<')
-        self.add('equal', r'\=\=')
-        self.add('greater_equal', r'\>\=')
-        self.add('lesser_equal', r'\<\=')
-        self.add('not_equal', r'\!\=')
+        self.lexer.add('greater', r'\>')
+        self.lexer.add('lesser', r'\<')
+        self.lexer.add('equal', r'\=\=')
+        self.lexer.add('greater_equal', r'\>\=')
+        self.lexer.add('lesser_equal', r'\<\=')
+        self.lexer.add('not_equal', r'\!\=')
 
         # logical operators
-        self.add('and', r'\&\&')
-        self.add('or', r'\|\|')
+        self.lexer.add('and', r'\&\&')
+        self.lexer.add('or', r'\|\|')
 
         # comment
-        self.add('comment', r'\/\/.*[\n\r]')
-
-    def add(self, key: str, value: str):
-        self.tokens[key] = value
-
-    def _build():
-        pass
+        self.lexer.add('comment', r'\/\/.*[\n\r]')
 
     def get_lexer(self):
         self._add_token()
-        return self._build()
+        return self.lexer.build()
