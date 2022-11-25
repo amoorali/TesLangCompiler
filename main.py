@@ -1,5 +1,5 @@
 import unittest
-import lexer
+from lexer import Lexer
 
 input_code = ""
 with open('Tests/test1.txt', 'r') as test_file:
@@ -15,7 +15,8 @@ with open('Tests/test1_answer.txt', 'r') as answer_file:
 class TestLexer(unittest.TestCase):
     def runTest(self):
         self.maxDiff = None
-        self.assertEqual(lexer.getTokens(input_code), output, "wrong output!")
+        lexer = Lexer().get_lexer()
+        self.assertEqual(lexer.lex(input_code), output, "wrong output!")
 
 
 unittest.main()

@@ -1,4 +1,4 @@
-from Lexer.tools import Token, LexerGenerator
+from tools.lexer_generator import LexerGenerator
 
 
 class Lexer():
