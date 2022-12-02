@@ -79,4 +79,4 @@ class Token(Enum):
     NOT     = re.compile(r'!')
 
     # whitespace
-    WHITESPACE = re.compile(r'(\t|\n|\s|\r)+')
+    WHITESPACE = re.compile(r'(\t|\s)+')
