@@ -29,8 +29,8 @@ class ParserGenerator:
 
     def create_func(self):
         """`func` :=
-                FUNC ID ( `flist` ) : Type => { `body` }    |
-                FUNC ID ( `flist` ) : Type => `expr`
+        1       FUNC ID ( `flist` ) : Type => { `body` }    |
+        2       FUNC ID ( `flist` ) : Type => `expr`
         """
         if self.is_token(Token.ID):
             self.drop_token()
@@ -70,9 +70,9 @@ class ParserGenerator:
 
     def create_flist(self):
         """`flist` :=
-                                    |
-                ID : Type           |
-                ID : Type , `flist`
+        1                           |
+        2       ID : Type           |
+        3       ID : Type , `flist`
         """
         if self.is_token(Token.ID):
             self.drop_token()    
@@ -96,8 +96,8 @@ class ParserGenerator:
 
     def create_body(self):
         """`body` :=
-                            |
-            `stmt` `body`
+        1                     |
+        2       `stmt` `body`
         """
         if self.is_token(Token.RBRACE):
             return
@@ -105,15 +105,15 @@ class ParserGenerator:
 
     def create_stmt(self):
         """`stmt` :=
-            `expr`;                                     |
-            `defvar`;                                   |
-            if ( `expr` ) { `stmt` }                    |
-            if ( `expr` ) { `stmt` } else { `stmt` }    |
-            while ( expr ) { `stmt` }                   |
-            for (ID , ID of `expr`) `stmt`              |
-            return `expr`;                              |
-            { `body` }                                  |
-            `func`
+        1       `expr`;                                     |
+        2       `defvar`;                                   |
+        3       if ( `expr` ) { `stmt` }                    |
+        4       if ( `expr` ) { `stmt` } else { `stmt` }    |
+        5       while ( expr ) { `stmt` }                   |
+        6       for (ID , ID of `expr`) `stmt`              |
+        7       return `expr`;                              |
+        8       { `body` }                                  |
+        9       `func`
         """
         def open_paren():
             if self.is_token(Token.LPAREN):
@@ -156,8 +156,8 @@ class ParserGenerator:
 
         def defvar_stmt():
             """defvar :=
-                let ID : Type           |
-                let ID : Type = expr
+            1       let ID : Type           |
+            2       let ID : Type = expr
             """
             if self.is_token(Token.LET):
                 self.drop_token()
@@ -264,15 +264,40 @@ class ParserGenerator:
             semi_colon()
 
     def create_expr(self):
+        """`expr` :=
+        1       `expr` [ `expr` ]               |
+        2       [ `clist` ]                     |
+        3       `expr` ? `expr` : `expr`        |
+        4       `expr` + `expr`                 |
+        5       `expr` - `expr`                 |
+        6       `expr` * `expr`                 |
+        7       `expr` / `expr`                 |
+        8       `expr` % `expr`                 |
+        9       `expr` > `expr`                 |
+        10      `expr` < `expr`                 |
+        11      `expr` == `expr`                |
+        12      `expr` >= `expr`                |
+        13      `expr` <= `expr`                |
+        14      `expr` != `expr`                |
+        15      `expr` || `expr`                |
+        16      `expr` && `expr`                |
+        17      ! `expr`                        |
+        18      + `expr`                        |
+        19      - `expr`                        |
+        20      `iden`                          |
+        21      `iden` = `expr`                 |
+        22      `iden` ( `clist` )              |
+        23      `number`
+        """
         pass
 
     def create_clist(self):
         """`clist` :=
-                                |
-            `expr`              |
-            `expr` , `clist`    |
+        1                           |
+        2       `expr`              |
+        3       `expr` , `clist`    |
         """
-        pass
+        
 
     def is_token(self, tk):
         return self.get_token().name == tk.name
