@@ -1,9 +1,10 @@
 from tools.lexer import Lexer
+from tools.parser_generator import ParserGenerator
 from tools.number_op import *
 from nodes import *
 
 
-txt = """function count_even_numbers(A: List): Number => { // salam
+txt = """function count_even_numbers(A): Number => { // salam
     let even_count: Number = 0;
 
     for (i, v of A) {
@@ -16,12 +17,13 @@ txt = """function count_even_numbers(A: List): Number => { // salam
     return even_count;
 }"""
 
-lexer = Lexer(txt)
+lexer = list(Lexer(txt))
+parser = ParserGenerator(lexer)
 
-
-for item in lexer:
-    literal = Literals(item, item.name, item.value)
-    if literal.eval() is not None:
-        print(literal.eval())
-    if item.name == 'ILLEGAL':
-        print('   {}\n   ^\nSyntaxError:\n\tInvalid Syntax at line: {}'.format(item.value, item.line))
+# for item in lexer:
+#     print(item)
+#     literal = Literals(item, item.name, item.value)
+#     if literal.eval() is not None:
+#         print(literal.eval())
+#     if item.name == 'ILLEGAL':
+#         print('   {}\n   ^\nSyntaxError:\n\tInvalid Syntax at line: {}'.format(item.value, item.line))
