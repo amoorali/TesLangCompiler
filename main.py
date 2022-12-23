@@ -4,20 +4,17 @@ from tools.number_op import *
 from nodes import *
 
 
-txt = """function count_even_numbers(A): Number => { // salam
-    let even_count: Number = 0;
-
-    for (i, v of A) {
-        if (v % 2 == 0) {
-            even_count= even_count + 1;
-            even_count = 4 / 3
-        }
-    }
-
-    return even_count;
-}"""
+txt = ""
+with open('Tests/test1.txt', 'r') as input_file:
+    for line in input_file.readlines():
+        txt += line
 
 lexer = list(Lexer(txt))
+
+with open('Tests/myAns1.txt', 'w') as out:
+    for item in lexer:    
+        out.write(item.value + '\n')
+
 parser = ParserGenerator(lexer)
 
 # for item in lexer:
