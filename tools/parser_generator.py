@@ -1,22 +1,23 @@
 from tools.symbol_table import SymbolTable
 from tools.ast import AbstractSyntaxTree
 from tools.error_generator import Error
+from tools.tokens import *
 
 
 class ParserGenerator:
     def __init__(self, tokens) -> None:
         self.tokens = tokens
         self.tokens.reverse()
-        self.types = ['_NUMBER', '_LIST', '_NULL']
+        self.types = [Token._NUMBER.name, Token._LIST.name, Token._NULL.name]
         [print(item) for item in self.tokens]
         print()
 
         while self.get_token():
-            if self.get_token().name == 'FUNC':
+            if self.get_token().name == Token.FUNC.name:
                 self.drop_token()
                 self.create_func()
 
-            elif self.get_token().name == 'EOF':
+            elif self.get_token().name == EOF:
                 self.drop_token()
                 self.drop_token()
                 return
@@ -27,27 +28,27 @@ class ParserGenerator:
 
 
     def create_func(self):
-        """func :=
-                FUNC ID ( flist ) : Type => { body }    |
-                FUNC ID ( flist ) : Type => expr
+        """`func` :=
+                FUNC ID ( `flist` ) : Type => { `body` }    |
+                FUNC ID ( `flist` ) : Type => `expr`
         """
-        if self.get_token().name == 'ID':
+        if self.get_token().name == Token.ID.name:
             self.drop_token()
-            if self.get_token().name == 'LPAREN':
+            if self.get_token().name == Token.LPAREN.name:
                 self.drop_token()
                 self.create_flist()
-                if self.get_token().name == 'RPAREN':
+                if self.get_token().name == Token.RPAREN.name:
                     self.drop_token()
-                    if self.get_token().name == 'COLON':
+                    if self.get_token().name == Token.COLON.name:
                         self.drop_token()
                         if self.get_token().name in self.types:
                             self.drop_token()
-                            if self.get_token().name == 'ARROW':
+                            if self.get_token().name == Token.ARROW.name:
                                 self.drop_token()
-                                if self.get_token().name == 'LBRACE':
+                                if self.get_token().name == Token.LBRACE.name:
                                     self.drop_token()
                                     self.create_body()
-                                    if self.get_token().name != 'RBRACE':
+                                    if self.get_token().name != Token.RBRACE.name:
                                         Error(SyntaxError, '}', self.get_token().value, self.get_token().line).raise_error()
                                 else:
                                     self.create_expr()
@@ -71,15 +72,15 @@ class ParserGenerator:
                 ID : Type           |
                 ID : Type , flist
         """
-        if self.get_token().name == 'ID':
+        if self.get_token().name == Token.ID.name:
             self.drop_token()    
-            if self.get_token().name == 'COLON':
+            if self.get_token().name == Token.COLON.name:
                 self.drop_token()
                 if self.get_token().name in self.types:
                     self.drop_token()
-                    if self.get_token().name == 'COMMA':
+                    if self.get_token().name == Token.COMMA.name:
                         self.drop_token()
-                        if self.get_token().name != 'ID':
+                        if self.get_token().name != Token.ID.name:
                             Error(SyntaxError, 'an argument', self.get_token().value, self.get_token().line).raise_error()
                         else:
                             self.create_flist()
