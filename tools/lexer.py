@@ -51,13 +51,12 @@ class LexerGenerator:
             while True:
                 char = file.read(1)
                 self._pointer += 1
-                if Token.WHITESPACE.value.match(char):
-                    continue
                 
                 temp_tk = token + char
+
                 for tk in Token:
                     if tk.value.match(temp_tk):
-                        print(f'-{temp_tk}-', '\t\t', self._pointer)
+                        # print(f'-{temp_tk}-', '\t\t', self._pointer)
                         if tk == Token.NEWLINE:
                             self._line += 1
                             self._pointer += 1
@@ -65,15 +64,15 @@ class LexerGenerator:
                             break
                         if tk == Token.COMMENT:
                             while True:
+                                char = file.read(1)
                                 self._pointer += 1
-                                if Token.NEWLINE.value.match(file.read(1)):
+                                if Token.NEWLINE.value.match(char):
                                     self._line += 1
                                     break
                             temp_tk = ''
-                        if tk == Token.WHITESPACE:
+                        elif tk == Token.WHITESPACE:
                             # ignore white spaces
-                            break   
-
+                            break
 
                         token = temp_tk
                         temp_result = token_info(tk.name, token, self._line)
@@ -83,7 +82,6 @@ class LexerGenerator:
                     if temp_result == None:
                         return token_info(ILLEGAL, temp_tk, self._line)
 
-                    self._pointer -= 1
                     return temp_result
 
     def drop_token(self):
