@@ -34,3 +34,57 @@ def Lexer(code_string: str) -> token_info:
         # so handing it by sending EOF 2 times
         yield token_info(EOF, '\x00', line)
         yield token_info(EOF, '\x00', line)
+
+class LexerGenerator:
+    def __init__(self, file_path) -> None:
+        self._file_path = file_path
+        self._pointer = 0
+        self._line = 1
+        self.next_token = self.get_token()
+        
+
+    def get_token(self):
+        token = ''
+        with open(self._file_path, 'r') as file:
+            temp_result = None
+            file.seek(self._pointer)
+            while True:
+                char = file.read(1)
+                self._pointer += 1
+                if Token.WHITESPACE.value.match(char):
+                    continue
+                
+                temp_tk = token + char
+                for tk in Token:
+                    if tk.value.match(temp_tk):
+                        print(f'-{temp_tk}-', '\t\t', self._pointer)
+                        if tk == Token.NEWLINE:
+                            self._line += 1
+                            self._pointer += 1
+                            temp_tk = ''
+                            break
+                        if tk == Token.COMMENT:
+                            while True:
+                                self._pointer += 1
+                                if Token.NEWLINE.value.match(file.read(1)):
+                                    self._line += 1
+                                    break
+                            temp_tk = ''
+                        if tk == Token.WHITESPACE:
+                            # ignore white spaces
+                            break   
+
+
+                        token = temp_tk
+                        temp_result = token_info(tk.name, token, self._line)
+                        break
+                else:
+                    # in case pattern doesn't match send the charector as illegal
+                    if temp_result == None:
+                        return token_info(ILLEGAL, temp_tk, self._line)
+
+                    self._pointer -= 1
+                    return temp_result
+
+    def drop_token(self):
+        self.next_token = self.get_token()
