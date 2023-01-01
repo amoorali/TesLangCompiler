@@ -289,7 +289,66 @@ class ParserGenerator:
         22      `iden` ( `clist` )              |
         23      `number`
         """
-        pass
+        def open_paren():
+            if self.is_token(Token.LPAREN):
+                self.drop_token()
+                return True
+            
+            Error(SyntaxError, '(', self.get_token().value, self.get_token().line).raise_error()
+            return False
+
+        def close_paren():
+            if self.is_token(Token.RPAREN):
+                self.drop_token()
+                return True
+            
+            Error(SyntaxError, ')', self.get_token().value, self.get_token().line).raise_error()
+            return False
+
+        def open_bracket():
+            if self.is_token(Token.LSQUARE):
+                self.drop_token()
+                return True
+
+            Error(SyntaxError, '[', self.get_token().value, self.get_token().line).raise_error()
+            return False
+
+        def close_bracket():
+            if self.is_token(Token.RSQUARE):
+                self.drop_token()
+                return True
+
+            Error(SyntaxError, ']', self.get_token().value, self.get_token().line).raise_error()
+            return False
+
+        if self.is_token(Token.LSQUARE):
+            self.drop_token()
+            self.create_clist()
+            close_bracket()
+        
+        elif self.is_token(Token.ID):
+            self.drop_token()
+            if self.is_token(Token.ASSIGN):
+                self.drop_token()
+                self.create_expr()
+            if open_paren():
+                self.create_clist()
+                close_paren()
+
+        elif self.is_token(Token.NUMBER):
+            self.drop_token()
+
+        elif self.is_token(Token.PLUS):
+            self.drop_token()
+            self.create_expr()
+        
+        elif self.is_token(Token.MINUS):
+            self.drop_token()
+            self.create_expr()
+        
+        elif self.is_token(Token.NOT):
+            self.drop_token()
+            self.create_expr()
 
     def create_clist(self):
         """`clist` :=
@@ -297,12 +356,21 @@ class ParserGenerator:
         2       `expr`              |
         3       `expr` , `clist`    |
         """
-        
+        if self.is_token_in_list([Token.ID.name, Token.NUMBER.name, Token.PLUS.name,\
+            Token.MINUS.name, Token.NOT.name, Token.LSQUARE.name]):
+            self.create_expr()
+            if self.is_token(Token.COMMA):
+                self.drop_token()
+                self.create_clist()
+            
 
-    def is_token(self, tk):
+    def is_token(self, tk) -> bool:
         return self.get_token().name == tk.name
+
+    def is_token_in_list(self, tk_list: list) -> bool:
+        return self.get_token().name in tk_list
         
-    def drop_token(self):
+    def drop_token(self) -> None:
         print(self.tokens.pop())
 
     def get_token(self):
