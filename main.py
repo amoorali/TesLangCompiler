@@ -1,21 +1,24 @@
-from tools.lexer import Lexer
+from tools.lexer import *
 from tools.parser_generator import ParserGenerator
 from tools.number_op import *
 from nodes import *
 
+tks = []
+lg = LexerGenerator(file_path='Tests/test1.txt')
+for _ in range(20):
+    print(lg.next_token)
+    lg.drop_token()
 
-txt = ""
-with open('Tests/test1.txt', 'r') as input_file:
-    for line in input_file.readlines():
-        txt += line
 
-lexer = list(Lexer(txt))
 
-with open('Tests/myAns1.txt', 'w') as out:
-    for item in lexer:    
-        out.write(item.value + '\n')
 
-parser = ParserGenerator(lexer)
+# lexer = list(Lexer(txt))
+
+# with open('Tests/myAns1.txt', 'w') as out:
+#     for item in lexer:    
+#         out.write(item.value + '\n')
+
+# parser = ParserGenerator(lexer)
 
 # for item in lexer:
 #     print(item)
